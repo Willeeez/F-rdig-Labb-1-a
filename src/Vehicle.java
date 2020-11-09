@@ -108,3 +108,4 @@ public abstract class Vehicle implements Movable{
         return currentPositionY;
     }
 }
+hej 
