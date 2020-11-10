@@ -6,10 +6,19 @@ public abstract class Vehicle implements Movable{
     public double currentSpeed; // The current speed of the car
     public Color color; // Color of the car
     public String modelName; // The car model name
-    public double currentPositionY; // The current position of Y - coordinate
-    public double currentPositionX; // The current position of X - coordinate
+    public double currentPositionY = 0; // The current position of Y - coordinate
+    public double currentPositionX = 0; // The current position of X - coordinate
     public String currentDirection;
-    public boolean interval;
+    public boolean intervalBrakeGas;
+    public boolean intervalChangeSpeed;
+    public Vehicle(int nrDoors, double enginePower, Color color, String modelName, String currentDirection){
+        this.nrDoors = nrDoors;
+        this.enginePower = enginePower;
+        this.color = color;
+        this.modelName = modelName;
+        this.currentDirection = currentDirection;
+        stopEngine();
+    }
 
     public int getNrDoors(){
         return nrDoors;
@@ -43,22 +52,20 @@ public abstract class Vehicle implements Movable{
         return modelName;
     }
 
-    public void move(int time) {
+    public void move() {
 
         if(getCurrentSpeed() == 0)
             System.out.println("You have to start the car first.");
-        if(getCurrentDirection().equals("South"))
-            currentPositionY = getCurrentPositionY() - getCurrentSpeed() * time;
-        if(getCurrentDirection().equals("East"))
-            currentPositionX = getCurrentPositionX() + getCurrentSpeed() * time;
-        if(getCurrentDirection().equals("North"))
-            currentPositionY = getCurrentPositionY() + getCurrentSpeed() * time;
-        if(getCurrentDirection().equals("West"))
-            currentPositionX = getCurrentPositionX() - getCurrentSpeed() * time;
+        else if(getCurrentDirection().equals("South"))
+            currentPositionY = getCurrentPositionY() - getCurrentSpeed() ;
+        else if(getCurrentDirection().equals("East"))
+            currentPositionX = getCurrentPositionX() + getCurrentSpeed() ;
+        else if(getCurrentDirection().equals("North"))
+            currentPositionY = getCurrentPositionY() + getCurrentSpeed() ;
+        else if (getCurrentDirection().equals("West"))
+            currentPositionX = getCurrentPositionX() - getCurrentSpeed() ;
     }
 
-
-    @Override
     public void turnLeft() {
         if(currentDirection.equals("North"))
             currentDirection = "West";
@@ -69,7 +76,7 @@ public abstract class Vehicle implements Movable{
         else if(currentDirection.equals("East"))
             currentDirection = "North";
     }
-    @Override
+
     public void turnRight() {
         if(currentDirection.equals("North"))
             currentDirection = "East";
@@ -80,24 +87,43 @@ public abstract class Vehicle implements Movable{
         else if(currentDirection.equals("West"))
             currentDirection = "North";
     }
-    public void interval(double amount, double y, double x) {
+    public void intervalBrakeGas(double amount, double y, double x) {
         if (amount < y) {
-            System.out.println("That is too low of a input, change your variable.");
+            System.out.println("You are now at a standstill");
+            currentSpeed = 0;
+            intervalBrakeGas = false;
             System.exit(1);
         }
         if (amount > x) {
-            System.out.println("That is too high of a input, change your variable.");
+            System.out.println("You are now going the max speed of " + x + ".");
+            currentSpeed = x;
+            intervalBrakeGas = false;
             System.exit(1);
         }
         else {
-            interval = true;
+            intervalBrakeGas = true;
+        }
+    }
+    public void intervalChangeSpeed(double amount, double y, double x) {
+        if (amount < y) {
+            System.out.println("You have to put pressure on the pedal");
+            currentSpeed = 0;
+            intervalBrakeGas = false;
+            System.exit(1);
+        }
+        if (amount > x) {
+            System.out.println("You are putting too much pressure on the pedal");
+            currentSpeed = x;
+            intervalBrakeGas = false;
+            System.exit(1);
+        }
+        else {
+            intervalChangeSpeed = true;
         }
     }
 
-    @Override
     public String getCurrentDirection() {
         return currentDirection;
-
     }
 
     public double getCurrentPositionX() {
@@ -108,4 +134,3 @@ public abstract class Vehicle implements Movable{
         return currentPositionY;
     }
 }
-hej 

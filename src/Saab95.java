@@ -1,78 +1,91 @@
 import java.awt.*;
 
-
 public class Saab95 extends Vehicle {
 
-
+    /***
+     * The turboOn is used to amplify the cars speed if true, starts with it on = true
+     */
     public boolean turboOn;
 
-    private Saab95(){
-        nrDoors = 2;
-        color = Color.red;
-        enginePower = 125;
-        turboOn = false;
-        String modelName = "Saab95";
-        stopEngine();
-        currentDirection = "South";
-        currentPositionX = 0;
+    /***
+     * Gives the new car its attributes from the superclass Vehicle and sets own attributes
+     */
+    Saab95(){
+        super(2,125,Color.red, "Saab95", "South");
+        setTurboOn();
+        setTurboOff();
+        intervalChangeSpeed = true;
+        intervalBrakeGas = true;
         currentPositionY = 0;
-        interval = true;
+        currentPositionX = 0;
     }
 
-    private void setTurboOn(){
+    /***
+     * Turns the turbo on
+     */
+    public void setTurboOn(){
         turboOn = true;
     }
 
-    private void setTurboOff(){
+    /***
+     * Turns the turbo off
+     */
+    public void setTurboOff(){
         turboOn = false;
     }
 
-
-    private double speedFactor(){ // Increase with factor if turbo is on
+    /***
+     *
+     * @return Will return the enginepower we have increased with the speedfactor.
+     */
+    public double speedFactor(){
         double turbo = 1;
         if(turboOn) turbo = 1.3;
-        return enginePower * 0.01 * turbo;
+        return enginePower * 0.1 * turbo;
     }
 
-    private void incrementSpeed(double amount){ // Increase speed
-       interval(amount,0,1);
-       if(interval == true)
+    /***
+     *
+     * @param amount usage in the method gas where we determine if the gas pedal is pushed or not, if so, the speed
+     *               is increased.
+     */
+    public void incrementSpeed(double amount){
+       intervalChangeSpeed(amount,0,1);
+       if(intervalChangeSpeed = true)
             currentSpeed = getCurrentSpeed() + speedFactor() * amount;
+
     }
 
-    private void decrementSpeed(double amount){
-        interval(amount, 0,1);
-        if(interval == true)
+    /***
+     *
+     * @param amount usage in the method brake where we determine if the brake pedal is pushed or not, if so, the speed
+     *               is decreased.
+     */
+    public void decrementSpeed(double amount){// Decrease speed
+        intervalChangeSpeed(amount, 0,1);
+        if(intervalChangeSpeed)
             currentSpeed = getCurrentSpeed() - speedFactor() * amount;
-
     }
 
-    // TODO fix this method according to lab pm
-    private void gas(double amount) {
+    /***
+     *
+     * @param amount Correct input will increase the speed by current speed given by the method incrementSpeed
+     */
+    public void gas(double amount) {
         incrementSpeed(amount);
-
-        interval(getCurrentSpeed(), 0, enginePower);
-        if (interval);
-
+        intervalBrakeGas(getCurrentSpeed(), 0, enginePower);
+        if (intervalBrakeGas) ;
     }
 
-    // TODO fix this method according to lab pm
+    /***
+     *
+     * @param amount Correct input will decrease the speed by current speed given by the method decrementSpeed.
+     */
     public void brake(double amount){
         decrementSpeed(amount);
-            interval(getCurrentSpeed(),0,enginePower);
-            if(interval);
+            intervalBrakeGas(getCurrentSpeed(),0,enginePower);
+            if(intervalBrakeGas);
     }
 
-    public static void main(String [] args) {
-        Saab95 nySaab95 = new Saab95();
-        nySaab95.startEngine();
-        nySaab95.gas(-1);
-        nySaab95.gas(0.99);
-        nySaab95.gas(0.99);
-    }
 
-    @Override
-    public void move() {
-
-    }
 }
